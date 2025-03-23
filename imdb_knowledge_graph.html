@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "The Shawshank Redemption", "label": "The Shawshank Redemption", "shape": "dot", "title": "The Shawshank Redemption"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Frank Darabont", "label": "Frank Darabont", "shape": "dot", "title": "Frank Darabont"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Tim Robbins", "label": "Tim Robbins", "shape": "dot", "title": "Tim Robbins"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Drama", "label": "Drama", "shape": "dot", "title": "Drama"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "The Godfather", "label": "The Godfather", "shape": "dot", "title": "The Godfather"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Francis Ford Coppola", "label": "Francis Ford Coppola", "shape": "dot", "title": "Francis Ford Coppola"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Marlon Brando", "label": "Marlon Brando", "shape": "dot", "title": "Marlon Brando"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Crime", "label": "Crime", "shape": "dot", "title": "Crime"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "The Dark Knight", "label": "The Dark Knight", "shape": "dot", "title": "The Dark Knight"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Christopher Nolan", "label": "Christopher Nolan", "shape": "dot", "title": "Christopher Nolan"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Christian Bale", "label": "Christian Bale", "shape": "dot", "title": "Christian Bale"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Action", "label": "Action", "shape": "dot", "title": "Action"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "The Godfather: Part II", "label": "The Godfather: Part II", "shape": "dot", "title": "The Godfather: Part II"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Al Pacino", "label": "Al Pacino", "shape": "dot", "title": "Al Pacino"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "12 Angry Men", "label": "12 Angry Men", "shape": "dot", "title": "12 Angry Men"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sidney Lumet", "label": "Sidney Lumet", "shape": "dot", "title": "Sidney Lumet"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Henry Fonda", "label": "Henry Fonda", "shape": "dot", "title": "Henry Fonda"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "The Lord of the Rings: The Return of the King", "label": "The Lord of the Rings: The Return of the King", "shape": "dot", "title": "The Lord of the Rings: The Return of the King"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Peter Jackson", "label": "Peter Jackson", "shape": "dot", "title": "Peter Jackson"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Elijah Wood", "label": "Elijah Wood", "shape": "dot", "title": "Elijah Wood"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Adventure", "label": "Adventure", "shape": "dot", "title": "Adventure"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Pulp Fiction", "label": "Pulp Fiction", "shape": "dot", "title": "Pulp Fiction"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Quentin Tarantino", "label": "Quentin Tarantino", "shape": "dot", "title": "Quentin Tarantino"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "John Travolta", "label": "John Travolta", "shape": "dot", "title": "John Travolta"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Schindler\u0027s List", "label": "Schindler\u0027s List", "shape": "dot", "title": "Schindler\u0027s List"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Steven Spielberg", "label": "Steven Spielberg", "shape": "dot", "title": "Steven Spielberg"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Liam Neeson", "label": "Liam Neeson", "shape": "dot", "title": "Liam Neeson"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Biography", "label": "Biography", "shape": "dot", "title": "Biography"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "History", "label": "History", "shape": "dot", "title": "History"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Inception", "label": "Inception", "shape": "dot", "title": "Inception"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Leonardo DiCaprio", "label": "Leonardo DiCaprio", "shape": "dot", "title": "Leonardo DiCaprio"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sci-Fi", "label": "Sci-Fi", "shape": "dot", "title": "Sci-Fi"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Fight Club", "label": "Fight Club", "shape": "dot", "title": "Fight Club"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "David Fincher", "label": "David Fincher", "shape": "dot", "title": "David Fincher"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Brad Pitt", "label": "Brad Pitt", "shape": "dot", "title": "Brad Pitt"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "The Shawshank Redemption", "title": "Directed By", "to": "Frank Darabont"}, {"arrows": "to", "from": "The Shawshank Redemption", "title": "Stars", "to": "Tim Robbins"}, {"arrows": "to", "from": "The Shawshank Redemption", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "The Godfather", "title": "Directed By", "to": "Francis Ford Coppola"}, {"arrows": "to", "from": "The Godfather", "title": "Stars", "to": "Marlon Brando"}, {"arrows": "to", "from": "The Godfather", "title": "Belongs To", "to": "Crime"}, {"arrows": "to", "from": "The Godfather", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "The Dark Knight", "title": "Directed By", "to": "Christopher Nolan"}, {"arrows": "to", "from": "The Dark Knight", "title": "Stars", "to": "Christian Bale"}, {"arrows": "to", "from": "The Dark Knight", "title": "Belongs To", "to": "Action"}, {"arrows": "to", "from": "The Dark Knight", "title": "Belongs To", "to": "Crime"}, {"arrows": "to", "from": "The Dark Knight", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "The Godfather: Part II", "title": "Directed By", "to": "Francis Ford Coppola"}, {"arrows": "to", "from": "The Godfather: Part II", "title": "Stars", "to": "Al Pacino"}, {"arrows": "to", "from": "The Godfather: Part II", "title": "Belongs To", "to": "Crime"}, {"arrows": "to", "from": "The Godfather: Part II", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "12 Angry Men", "title": "Directed By", "to": "Sidney Lumet"}, {"arrows": "to", "from": "12 Angry Men", "title": "Stars", "to": "Henry Fonda"}, {"arrows": "to", "from": "12 Angry Men", "title": "Belongs To", "to": "Crime"}, {"arrows": "to", "from": "12 Angry Men", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "The Lord of the Rings: The Return of the King", "title": "Directed By", "to": "Peter Jackson"}, {"arrows": "to", "from": "The Lord of the Rings: The Return of the King", "title": "Stars", "to": "Elijah Wood"}, {"arrows": "to", "from": "The Lord of the Rings: The Return of the King", "title": "Belongs To", "to": "Action"}, {"arrows": "to", "from": "The Lord of the Rings: The Return of the King", "title": "Belongs To", "to": "Adventure"}, {"arrows": "to", "from": "The Lord of the Rings: The Return of the King", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "Pulp Fiction", "title": "Directed By", "to": "Quentin Tarantino"}, {"arrows": "to", "from": "Pulp Fiction", "title": "Stars", "to": "John Travolta"}, {"arrows": "to", "from": "Pulp Fiction", "title": "Belongs To", "to": "Crime"}, {"arrows": "to", "from": "Pulp Fiction", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "Schindler\u0027s List", "title": "Directed By", "to": "Steven Spielberg"}, {"arrows": "to", "from": "Schindler\u0027s List", "title": "Stars", "to": "Liam Neeson"}, {"arrows": "to", "from": "Schindler\u0027s List", "title": "Belongs To", "to": "Biography"}, {"arrows": "to", "from": "Schindler\u0027s List", "title": "Belongs To", "to": "Drama"}, {"arrows": "to", "from": "Schindler\u0027s List", "title": "Belongs To", "to": "History"}, {"arrows": "to", "from": "Inception", "title": "Directed By", "to": "Christopher Nolan"}, {"arrows": "to", "from": "Inception", "title": "Stars", "to": "Leonardo DiCaprio"}, {"arrows": "to", "from": "Inception", "title": "Belongs To", "to": "Action"}, {"arrows": "to", "from": "Inception", "title": "Belongs To", "to": "Adventure"}, {"arrows": "to", "from": "Inception", "title": "Belongs To", "to": "Sci-Fi"}, {"arrows": "to", "from": "Fight Club", "title": "Directed By", "to": "David Fincher"}, {"arrows": "to", "from": "Fight Club", "title": "Stars", "to": "Brad Pitt"}, {"arrows": "to", "from": "Fight Club", "title": "Belongs To", "to": "Drama"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
